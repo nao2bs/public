@@ -13,6 +13,7 @@ show_menu() {
     echo "8. Nodejs"
     echo "9. Ruby"
     echo "10. Rust"
+    echo "11. LazyGit"
 }
 update() {
     apt update -q; apt upgrade -yq
@@ -135,9 +136,26 @@ script10() {
     echo "##################"
     echo "Rust"
     echo "##################"
-    
+    sudo apt install curl build-essential gcc make -y &&\
+    curl --proto '=https' --tlsv1.3 https://sh.rustup.rs -sSf | sh &&\
+    source ~/.profile &&\
+    rustc -V &&\
+    rustup -V &&\
     echo "##################"
     echo "Rust Finish"
+    echo "##################"
+}
+script11() {
+    
+    echo "##################"
+    echo "LazyGit"
+    echo "##################"
+    LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+    tar xf lazygit.tar.gz lazygit
+    sudo install lazygit /usr/local/bin
+    echo "##################"
+    echo "LazyGit Finish"
     echo "##################"
 }
 # メイン処理
@@ -185,6 +203,9 @@ while true; do
             10)
                 script10
                 ;;
+	    11)
+		script11
+		;;
             *)
                 echo "無効な番号です: $choice"
                 ;;
